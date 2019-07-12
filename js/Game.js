@@ -7,62 +7,63 @@ class Game {
 	this.missed = 0;						// counts missed guesses
 	this.phrases = this.createPhrases();	// contains all the phrases
 	this.activePhrase = null;				// randomly selected phrase to be used for the game.
-    }	// END constructor
+    }	
 
     createPhrases() {
     /* Creates phrases for use in game
      * @return {array} An array of phrases that could be used in the game*/
 		let phrases = [
-            new Phrase('Life is like a box of chocolates'),
-            new Phrase('There is no trying'),
-            new Phrase('May the Force be with you'),
-            new Phrase('You have to see the Matrix for yourself'),
-            new Phrase('Are you talking to ME')
+            new Phrase('I have a dream'),
+            new Phrase('Inconceivable'),
+            new Phrase('Why did the chicken cross the road'),
+            new Phrase('We all live in a Yellow Submarine'),
+            new Phrase('Live long and prosper'),
+			new Phrase('You and I remember Budapest very differently'),
+			new Phrase('My Precious')
         ];
         return phrases
-    }	// END createPhrases
+    }	
 	
 	getRandomPhrase() {
 	/* Selects random phrase from phrases property
 	* @return {Object} Phrase object chosen to be used*/
 		let randomNumber = Math.floor(Math.random() * this.phrases.length );
 		return this.phrases[randomNumber];
-	}	// END getRandomPhrase
+	}	
 	
 	startGame() {
 	/* Begins game by selecting a random phrase and displaying it to user */
-		const startScreen = document.querySelector('#overlay');	// hide the start screen overlay
+		const startScreen = document.querySelector('#overlay');	
 		startScreen.style.display = 'none';
-		this.activePhrase = this.getRandomPhrase();	// randomly select a phrase from stored phrase array and make it the Active Phrase for the game.
-		this.activePhrase.addPhraseToDisplay();	// add the active phrase to the gameboard
-	//	handleInteraction();
-	}	// END startGame
+		this.activePhrase = this.getRandomPhrase();	
+		this.activePhrase.addPhraseToDisplay();	
+	}	
 	
 	checkForWin() {
 	/* check to see if the player has revealed all of the letters in the active phrase. */	
 	/* @return {boolean} True if game has been won, false if game wasn't won */
-		let phraseLettersList = document.querySelectorAll('.letter');	// all letters in the phrase
-		let matchedLettersList = document.querySelectorAll('.show');	// only letters that have been guessed correctly in the phrase
+		let phraseLettersList = document.querySelectorAll('.letter');	
+		let matchedLettersList = document.querySelectorAll('.show');	
         if(matchedLettersList.length === phraseLettersList.length) {
             return true;
         } else {
             return false;
         }
-	}	// END checkForWin
+	}	
 	
 	removeLife(){
 		/* Increases the value of the missed property */
-		this.missed += 1;
 		/* removes a life from the scoreboard */
-		let liveHeart = document.querySelector('.tries');	// get the first available live heart.
-		let liveHeartImg = liveHeart.firstChild;
-		liveHeart.classList.remove('tries');		// remove this heart from the "tries" list
-		liveHeartImg.src = "images/lostHeart.png";	// replace the blue Live Heart image with the greyed-out Lost Heart image.
 		/* Checks if player has remaining lives and ends game if player is out */
+		this.missed += 1;
+		let liveHeart = document.querySelector('.tries');
+		let liveHeartImg = liveHeart.firstChild;
+		liveHeart.classList.remove('tries');
+		liveHeartImg.src = "images/lostHeart.png";	
 		if(this.missed === 5) {
 			this.gameOver(false);
 		}
-	}	// END removeLife
+	}	
 	
 	gameOver(gameWon) {
 	/* Displays the original start screen overlay and updates the overlay with a friendly win or loss message */	
@@ -80,7 +81,7 @@ class Game {
 			let msgText = "Sorry, better luck next time!";
 			h1.textContent = msgText;
 		}
-	}	// END gameOver
+	}	
 	
 	resetGame () {
 		/* reset the gameboard between games: */
@@ -108,13 +109,13 @@ class Game {
 				hearts[i].firstChild.src = 'images/liveHeart.png';
 			}	   
 		}
-	}	// END resetGame
+	}	
 	
 	handleInteraction(keySel) {
-		keySel.disabled = true;					// disable key once it's been clicked
+		/* disable key once it's been clicked */
+		/* If the phrase includes the guessed letter, show the letter in the phrase box(es). Check to see if player has won yet. Otherwise, highlight the key on the keyboard and lose a life (Live Heart). */
+		keySel.disabled = true;					
 		let letter = keySel.textContent;
-		/* If the phrase includes the guessed letter, show the letter in the phrase box(es). Check to see if player has won yet. */
-		/* If the phrase does not include the guessed letter, highlight the key on the keyboard and lose a life (Live Heart). */
 		if(this.activePhrase.checkLetter(letter)){
 			keySel.classList.add('chosen');
 			this.activePhrase.showMatchedLetter(letter);
@@ -125,8 +126,7 @@ class Game {
 			keySel.classList.add('wrong');
 			this.removeLife();
         }
-
-	}	// END handleInteraction
+	}	
 	
 }
 
